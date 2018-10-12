@@ -1,0 +1,105 @@
+Name: Kin (Nathan) Chan
+Internet ID: chanx393
+
+------------------Q1-------------------------
+sum [] = 0
+sum x::xs -> x + sum xs
+
+take 0 lst = [ ]
+take n [ ] = [ ]
+take n (x::xs) = x::take (n-1) xs
+
+evens_from 0 v = [ ]
+evens_from n v = v+v :: evens_from (n-1) (v+1)
+
+sum (take 3 (evens_from 5 1))
+
+CALL BY VALUE:
+ sum (take 3 (evens_from 5 1))
+=sum (take 3 ((1+1) :: (evens_from (5-1) (1+1))))
+=sum (take 3 (2 :: (evens_from (5-1) (1+1))))
+=sum (take 3 (2 :: (evens_from 4 (1+1))))
+=sum (take 3 (2 :: (evens_from 4 2)))
+=sum (take 3 (2 :: (2+2) :: (evens_from (4-1) (2+1))))
+=sum (take 3 (2 :: 4 :: (evens_from (4-1) (2+1))))
+=sum (take 3 (2 :: 4 :: (evens_from 3 (2+1))))
+=sum (take 3 (2 :: 4 :: (evens_from 3 3)))
+=sum (take 3 (2 :: 4 :: (3+3) :: (evens_from (3-1) (3+1))))
+=sum (take 3 (2 :: 4 :: 6 :: (evens_from (3-1) (3+1))))
+=sum (take 3 (2 :: 4 :: 6 :: (evens_from 2 (3+1))))
+=sum (take 3 (2 :: 4 :: 6 :: (evens_from 2 4)))
+=sum (take 3 (2 :: 4 :: 6 :: (4+4) :: (evens_from (2-1) (4+1))))
+=sum (take 3 (2 :: 4 :: 6 :: 8 :: (evens_from (2-1) (4+1))))
+=sum (take 3 (2 :: 4 :: 6 :: 8 :: (evens_from 1 (4+1))))
+=sum (take 3 (2 :: 4 :: 6 :: 8 :: (evens_from 1 5)))
+=sum (take 3 (2 :: 4 :: 6 :: 8 :: (5+5) :: (evens_from (1-1) (5+1))))
+=sum (take 3 (2 :: 4 :: 6 :: 8 :: 10 :: (evens_from (1-1) (5+1))))
+=sum (take 3 (2 :: 4 :: 6 :: 8 :: 10 :: (evens_from 0 (5+1))))
+=sum (take 3 (2 :: 4 :: 6 :: 8 :: 10 :: (evens_from 0 (5+1))))
+=sum (take 3 (2 :: 4 :: 6 :: 8 :: 10 :: (evens_from 0 6)))
+=sum (take 3 (2 :: 4 :: 6 :: 8 :: 10 :: []))
+=sum (2 :: (take (3-1) (4 :: 6 :: 8 :: 10 :: [])))
+=sum (2 :: (take 2 (4 :: 6 :: 8 :: 10 :: [])))
+=sum (2 :: 4 :: (take (2-1) (6 :: 8 :: 10 :: [])))
+=sum (2 :: 4 :: (take 1 (6 :: 8 :: 10 :: [])))
+=sum (2 :: 4 :: 6 :: (take (1-1) (8 :: 10 :: [])))
+=sum (2 :: 4 :: 6 :: (take 0 (8 :: 10 :: [])))
+=sum (2 :: 4 :: 6 :: [])
+=2 + (sum (4 :: 6 :: []))
+=2 + 4 + (sum (6 :: []))
+=6 + (sum (6 :: []))
+=6 + 6 + (sum ([]))
+=12 + (sum ([]))
+=12 + 0
+=12
+
+CALL BY NAME:
+ sum (take 3 (evens_from 5 1))
+=sum (take 3 ((1+1) :: (evens_from (5-1) (1+1))))
+=sum ((1+1) :: (take (3-1) (evens_from (5-1) (1+1))))
+=2 + (sum (take (3-1) (evens_from (5-1) (1+1))))
+=2 + (sum (take (3-1) (evens_from 4 (1+1))))
+=2 + (sum (take (3-1) (((1+1)+(1+1)) :: (evens_from (4-1) (1+1+1)))))
+=2 + (sum (take 2 (((1+1)+(1+1)) :: (evens_from (4-1) (1+1+1)))))
+=2 + (sum (((1+1)+(1+1)) :: (take (2-1) (evens_from (4-1) (1+1+1)))))
+=2 + ((1+1)+(1+1)) + (sum (take (2-1) (evens_from (4-1) (1+1+1))))
+=2 + (2+2) + (sum (take (2-1) (evens_from (4-1) (1+1+1))))
+=2 + 4 + (sum (take (2-1) (evens_from (4-1) (1+1+1))))
+=6 + (sum (take (2-1) (evens_from (4-1) (1+1+1))))
+=6 + (sum (take (2-1) (evens_from 3 (1+1+1))))
+=6 + (sum (take (2-1) (((1+1+1)+(1+1+1)) :: (evens_from (3-1) (1+1+1+1)))))
+=6 + (sum (take 1 (((1+1+1)+(1+1+1)) :: (evens_from (3-1) (1+1+1+1)))))
+=6 + (sum (((1+1+1)+(1+1+1)) :: (take (1-1) (evens_from (3-1) (1+1+1+1)))))
+=6 + ((1+1+1)+(1+1+1)) + (sum (take (1-1) (evens_from (3-1) (1+1+1+1))))
+=6 + (3+3) + (sum (take (1-1) (evens_from (3-1) (1+1+1+1))))
+=6 + 6 + (sum (take (1-1) (evens_from (3-1) (1+1+1+1))))
+=12 + (sum (take (1-1) (evens_from (3-1) (1+1+1+1))))
+=12 + (sum (take (1-1) (evens_from 2 (1+1+1+1))))
+=12 + (sum (take (1-1) (((1+1+1+1)+(1+1+1+1)) :: (evens_from (2-1) (1+1+1+1+1)))))
+=12 + (sum (take 0 (((1+1+1+1)+(1+1+1+1)) :: (evens_from (2-1) (1+1+1+1+1)))))
+=12 + (sum ([]))
+=12 + 0
+=12
+
+LAZY EVALUATION:
+ sum (take 3 (evens_from 5 1))
+=sum (take 3 ((1+1) :: (evens_from (5-1) (1+1))))
+=sum ((1+1) :: (take (3-1) (evens_from (5-1) (1+1))))
+=(1+1) + sum (take (3-1) (evens_from (5-1) (1+1)))
+=(1+1) + sum (take 2 (evens_from (5-1) (1+1)))
+=(1+1) + sum (take 2 (evens_from 4 (1+1)))
+=(1+1) + sum (take 2 (evens_from 4 2))
+=(1+1) + sum (take 2 ((2+2) :: (evens_from (4-1) (2+1))))
+=(1+1) + sum (((2+2) :: take (2-1) (evens_from (4-1) (2+1))))
+=(1+1) + (2+2) + sum (take (2-1) (evens_from (4-1) (2+1)))
+=(1+1) + (2+2) + sum (take 1 (evens_from (4-1) (2+1)))
+=(1+1) + (2+2) + sum (take 1 (evens_from 3 (2+1)))
+=(1+1) + (2+2) + sum (take 1 (evens_from 3 3))
+=(1+1) + (2+2) + sum (take 1 ((3+3) :: (evens_from (3-1) (3+1))))
+=(1+1) + (2+2) + sum (((3+3) :: take (1-1) (evens_from (3-1) (3+1))))
+=(1+1) + (2+2) + (3+3) + sum (take (1-1) (evens_from (3-1) (3+1)))
+=(1+1) + (2+2) + (3+3) + sum (take 0 (evens_from (3-1) (3+1)))
+=(1+1) + (2+2) + (3+3) + sum ([])
+=(1+1) + (2+2) + (3+3) + 0
+=2 + 4 + 6 + 0
+=12

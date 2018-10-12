@@ -1,0 +1,73 @@
+Name: Kin (Nathan) Chan
+Internet ID: chanx393
+
+------------------Q2-------------------------
+foldr f [] v = v
+foldr f (x::xs) v = f x (foldr f xs v)
+
+foldl f v [] = v
+foldl f v (x::xs) = foldl f (f v x) xs
+
+and b1 b2 = if b1 then b2 else false
+
+andl l = foldl and true l
+andr l = foldr and l true
+
+andl (true::false::true::true::[])
+andr (true::false::true::true::[])
+
+andr - CALL BY VALUE:
+ andr (true::false::true::true::[])
+=foldr and (true::false::true::true::[]) true
+=and true (foldr and (false::true::true::[]) true)
+=and true (and false (foldr and (true::true::[]) true))
+=and true (and false (and true (foldr and (true::[]) true)))
+=and true (and false (and true (and true (foldr and [] true))))
+=and true (and false (and true (and true true)))
+=and true (and false (and true true))
+=and true (and false true)
+=and true false
+=false
+
+andr - CALL BY NAME:
+ andr (true::false::true::true::[])
+=foldr and (true::false::true::true::[]) true
+=and true (foldr and (false::true::true::[]) true)
+=foldr and (false::true::true::[]) true
+=and false (foldr and (true::true::[]) true)
+=false
+
+andl - CALL BY VALUE:
+ andl (true::false::true::true::[])
+=foldl and true (true::false::true::true::[])
+=foldl and (and true true) (false::true::true::[])
+=foldl and true (false::true::true::[])
+=foldl and (and true false) (true::true::[])
+=foldl and false (true::true::[])
+=foldl and (and false true) (true::[])
+=foldl and false (true::[])
+=foldl and (and false true) []
+=foldl and false []
+=false
+
+andl - CALL BY NAME:
+ andl (true::false::true::true::[])
+=foldl and true (true::false::true::true::[])
+=foldl and (and true true) (false::true::true::[])
+=foldl and (and (and true true) false) (true::true::[])
+=foldl and (and (and (and true true) false) true) (true::[])
+=foldl and (and (and (and (and true true) false) true) true) []
+=(and (and (and (and true true) false) true) true)
+=(and (and (and true false) true) true)
+=(and (and false true) true)
+=(and false true)
+=false
+
+Which is better?
+After you have completed all four evaluations
+(call by value and call by name for both andr and andl),
+state which evaluation is most efficient and briefly explain why.
+
+Answer: Based on the steps for each expression, I think call-by-name evaluation
+is most efficient because it will stop the loop when the answer is computed
+even there is more expression.
